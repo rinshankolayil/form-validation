@@ -101,26 +101,6 @@ function isDate(value) {
     
 }
 
-function return_date(value){
-	var date = value.split("-");
-    var date_two = value.split('/')
-    var date_length = date.length
-    var date_two_length = date_two.length 
-    if(date_length == 3){
-    	if(isDate(value)){
-    		return date
-    	}
-    	else{
-    		return '';
-    	}
-    	
-    }
-    else{
-    	return '';
-    	// return date_two
-    }
-}
-
 function success_alert(id,style){
 	if(style == 'outline' || style == ''){
 		$(id).css('outline', 'none');
