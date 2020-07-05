@@ -23,10 +23,20 @@ function loader(){
 	}
 	function loader(is_on,div_append=''){
 		if(is_on == true){
-			$('#'+div_append).css('opacity', 0.7);
+			if($('#'+div_append).length == 0){
+				$('#'+div_append).css('opacity', 0.7);
+			}
+			else{
+				$('.'+div_append).css('opacity', 0.7);
+			}
 		}
 		else{
-			$('#'+div_append).css('opacity', 1.0);
+			if($('#'+div_append).length == 0){
+				$('#'+div_append).css('opacity', 1.0);
+			}
+			else{
+				$('.'+div_append).css('opacity', 1.0);
+			}
 		}
 	}
 	
