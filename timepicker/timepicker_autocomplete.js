@@ -1,57 +1,24 @@
 $(document).ready(function () {
     $.fn.timepicker_autocomplete = function (options = {}) {
         var default_options = {
-            'minute_diff': 24,
-            'hour_diff': 1,
-            'time_start': '00:00:00',
-            'time_end': '23:59:00',
-            'search_time_format': 'hh:mm:ss a',
-            'diff_apply_all': false,
-            'create_new_input': false,
+            'minute_diff': (options['minute_diff']) ? options['minute_diff'] : 30,
+            'hour_diff': (options['hour_diff']) ? options['hour_diff'] : 1,
+            'time_start': (options['time_start']) ? options['time_start'] : '00:00:00',
+            'time_end': (options['time_end']) ? options['time_end'] : '23:59:00',
+            'search_time_format': (options['search_time_format']) ? options['search_time_format'] : 'hh:mm:ss a',
+            'diff_apply_all': (options['diff_apply_all']) ? options['diff_apply_all'] : false,
+            'create_new_input': (options['create_new_input']) ? options['create_new_input'] : false,
+            'input_type': (options['input_type']) ? options['input_type'] : 'hidden',
         }
-        if (!options['time_start']) {
-            var time_start = default_options['time_start'];
-        }
-        else {
-            var time_start = options['time_start'];
-        }
-        if (!options['time_end']) {
-            var time_end = default_options['time_end'];
-        }
-        else {
-            var time_end = options['time_end'];
-        }
-        if (!options['minute_diff']) {
-            var minute_diff = default_options['minute_diff'];
-        }
-        else {
-            var minute_diff = options['minute_diff'];
-        }
-        if (!options['hour_diff']) {
-            var hour_diff = default_options['hour_diff'];
-        }
-        else {
-            var hour_diff = options['hour_diff'];
-        }
-        if (!options['search_time_format']) {
-            var search_time_format = default_options['search_time_format'];
-        }
-        else {
-            var search_time_format = options['search_time_format'];
-        }
+        var time_start = default_options['time_start'];
+        var time_end = default_options['time_end'];
+        var minute_diff = default_options['minute_diff'];
+        var hour_diff = default_options['hour_diff'];
+        var search_time_format = default_options['search_time_format'];
         var search_time_format_ = search_time_format;
-        if (!options['diff_apply_all']) {
-            var diff_apply_all = default_options['diff_apply_all'];
-        }
-        else {
-            var diff_apply_all = options['diff_apply_all'];
-        }
-        if (!options['create_new_input']) {
-            var create_new_input = default_options['create_new_input'];
-        }
-        else {
-            var create_new_input = options['create_new_input'];
-        }
+        var diff_apply_all = default_options['diff_apply_all'];
+        var create_new_input = default_options['create_new_input'];
+        var input_type = default_options['input_type'];
         var hour_format = search_time_format.substring(0, 2).trim();
         hour_format_ = hour_format.replace(":", "")
         // DONT MAKE hour_format LOWECASE HERE (hour_format) BEFORE THE BELOW IF CONDITION
@@ -192,15 +159,16 @@ $(document).ready(function () {
                         }
                     }
                 } // HOUR END
-                console.log(timeSource)
                 var elem = $(this[0])
                 elem.attr('create_new_input', create_new_input);
                 elem.attr('search_time_format', search_time_format_);
+                elem.attr('input_type', input_type);
                 elem.autocomplete({
                     source: timeSource,
                     select: function (_, item) {
                         var time_format = $(this).attr('search_time_format')
                         var create_new_input = $(this).attr('create_new_input')
+                        var input_type = $(this).attr('input_type')
                         var input_name = $(this).attr('name');
                         var time_format_split = time_format.split(":")
                         if (typeof input_name !== typeof undefined && input_name !== false) {
@@ -210,9 +178,7 @@ $(document).ready(function () {
                                 var selected_time_ = selected_time.trim();
                                 selected_time = selected_time.replace("am", "").replace("pm", "").trim()
                                 var selected_time_split = selected_time.split(":")
-                                console.log(selected_time)
                                 var hour = parseInt(selected_time_split[0].trim())
-
                                 if (selected_time_.includes("pm") || selected_time_.includes("am")) {
                                     if (selected_time_.includes("pm")) {
                                         hour += 12;
@@ -238,9 +204,8 @@ $(document).ready(function () {
                                         second = second.toString();
                                     }
                                     var time_push = hour_in_24H_format + ':' + minute + ':' + second;
-                                    console.log(selected_time_split)
                                     if ($('#' + input_name_generated + '_id').length == 0) {
-                                        $('<input type="text" value="' + time_push + '" name="' + input_name_generated + '" id="' + input_name_generated + '_id">').insertAfter(this);
+                                        $('<input type="' + input_type + '" value="' + time_push + '" name="' + input_name_generated + '" id="' + input_name_generated + '_id">').insertAfter(this);
                                     } else {
                                         $('#' + input_name_generated + '_id').val(time_push)
                                     }
